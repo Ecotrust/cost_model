@@ -8,7 +8,7 @@ def harvestcost(PartialCut, Slope, SkidDist, Elevation,
                 RemovalsCT, TreeVolCT,
                 RemovalsSLT, TreeVolSLT,
                 RemovalsLLT, TreeVolLLT,
-                HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT, NoHelicopter, NoHaulProportion):
+                HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT, Helicopter, HaulProportion):
 
         ################################################
         # General functions                            #
@@ -1527,7 +1527,7 @@ def harvestcost(PartialCut, Slope, SkidDist, Elevation,
                 CostProcessAc = round (CostProcess*VolPerAcreSLT/100)
                 CostChipWTAc = round (CostChipWT*VolPerAcreCT/100)
                 CostLoadAc = round(CostLoad*VolPerAcreALT/100)
-                GroundBasedMechWTAc = CostFellBunchAc+CostManFLBLLTAc+CostSkidBunAc+CostProcessAc+CostChipWTAc+CostLoadAc*NoHaulProportion
+                GroundBasedMechWTAc = CostFellBunchAc+CostManFLBLLTAc+CostSkidBunAc+CostProcessAc+CostChipWTAc+CostLoadAc*HaulProportion
                 GroundBasedMechWT = round (GroundBasedMechWTAc/VolPerAcre,4)
             else:
                 GroundBasedMechWT = float('NaN')
@@ -1547,7 +1547,7 @@ def harvestcost(PartialCut, Slope, SkidDist, Elevation,
                 CostChipWTAc = round (CostChipWT*VolPerAcreCT/100)
                 CostLoadAc = round(CostLoad*VolPerAcreALT/100)
                 CostLoadAc = round(CostLoad*VolPerAcreALT/100)
-                GroundBasedManualWTAc = CostManFLBLLT2Ac + CostManFellST2Ac + CostSkidUBAc + CostProcessAc + CostChipWTAc + CostLoadAc*NoHaulProportion
+                GroundBasedManualWTAc = CostManFLBLLT2Ac + CostManFellST2Ac + CostSkidUBAc + CostProcessAc + CostChipWTAc + CostLoadAc*HaulProportion
                 GroundBasedManualWT = round (GroundBasedManualWTAc/VolPerAcre, 4)
             else:
                 GroundBasedManualWT = float('NaN') 
@@ -1570,13 +1570,13 @@ def harvestcost(PartialCut, Slope, SkidDist, Elevation,
                 CostProcessAc = round(CostProcess*VolPerAcreSLT/100)
                 CostChipWTAc = round (CostChipWT*VolPerAcreCT/100)
                 CostLoadAc = round(CostLoad*VolPerAcreALT/100)
-                CableManualWTAc = CostManFLBLLT2Ac + CostManFellST2Ac + CostProcessAc + CostChipWTAc + CostYardUBAc + CostLoadAc*NoHaulProportion
+                CableManualWTAc = CostManFLBLLT2Ac + CostManFellST2Ac + CostProcessAc + CostChipWTAc + CostYardUBAc + CostLoadAc*HaulProportion
                 CableManualWT = round(CableManualWTAc/VolPerAcre, 4)
             else:
                 CableManualWT = float('NaN')
 
             # Cabel Manual WT (without SkidDist limit --> no helicopter)
-            if NoHelicopter is True:
+            if Helicopter is False:
                 if TreeVolCT<80 and TreeVolSLT<80 and TreeVolLLT<500 and TreeVolALT<500 and TreeVol<500:
                     CostManFLBLLT2 = CostManFLBLLT2func()
                     CostManFellST2 = CostManFellST2func()
@@ -1594,13 +1594,13 @@ def harvestcost(PartialCut, Slope, SkidDist, Elevation,
                     CostProcessAc = round(CostProcess*VolPerAcreSLT/100)
                     CostChipWTAc = round (CostChipWT*VolPerAcreCT/100)
                     CostLoadAc = round(CostLoad*VolPerAcreALT/100)
-                    CableManualWTAc = CostManFLBLLT2Ac + CostManFellST2Ac + CostProcessAc + CostChipWTAc + CostYardUBAc + CostLoadAc*NoHaulProportion
+                    CableManualWTAc = CostManFLBLLT2Ac + CostManFellST2Ac + CostProcessAc + CostChipWTAc + CostYardUBAc + CostLoadAc*HaulProportion
                     CableManualWT = round(CableManualWTAc/VolPerAcre, 4)
                 else:
                     CableManualWT = float('NaN')
             
             # Helicopter Manual WT
-            if NoHelicopter is False:
+            if Helicopter is True:
                 if TreeVolCT<80 and TreeVolALT<250 and SkidDist<10000 and TreeVol<250 and TreeVolLLT<150:
                     CostHeliYardML, CostHeliLoadML = CostHelifunc()
                     CostManFLB = CostManFLBfunc()
@@ -1609,7 +1609,7 @@ def harvestcost(PartialCut, Slope, SkidDist, Elevation,
                     CostHeliLoadMLAc = round(CostHeliLoadML*VolPerAcreALT/100)
                     CostManFLBAc = round (CostManFLB*VolPerAcre/100)
                     CostChipWTAc = round (CostChipWT*VolPerAcreCT/100)
-                    HelicopterManualWTAc = CostHeliLoadMLAc*NoHaulProportion + CostHeliYardMLAc + CostManFLBAc + CostChipWTAc
+                    HelicopterManualWTAc = CostHeliLoadMLAc*HaulProportion + CostHeliYardMLAc + CostManFLBAc + CostChipWTAc
                     HelicopterManualWT = round (HelicopterManualWTAc/VolPerAcre, 4)
                 else:
                     HelicopterManualWT = float('NaN')
