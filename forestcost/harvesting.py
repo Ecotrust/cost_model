@@ -1607,8 +1607,8 @@ def harvestcost(PartialCut, Slope, SkidDist, Elevation,
             HarvestingSystem = zip(HarvestingSystemName, HarvestingSystemPrice)
 
             HarvestingSystem, Price = min(HarvestingSystem, key=operator.itemgetter(1))
-            if math.is_inf(Price):
-                raise Exception("No suitable harvest system was found")
+            if math.isinf(Price):
+                raise Exception("No suitable harvest system was found, min price is inf")
 
         else:
             Price = 0.0
