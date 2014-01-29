@@ -1,0 +1,2 @@
+python validate.py > results.csv
+R -f graph.R
