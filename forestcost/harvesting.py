@@ -1530,10 +1530,12 @@ def harvestcost(PartialCut, Slope, SkidDist, Elevation,
                 GroundBasedMechWTAc = CostFellBunchAc+CostManFLBLLTAc+CostSkidBunAc+CostProcessAc+CostChipWTAc+CostLoadAc*HaulProportion
                 GroundBasedMechWT = round (GroundBasedMechWTAc/VolPerAcre,4)
             else:
-                GroundBasedMechWT = float('NaN')
+                GroundBasedMechWT = float('inf')
 
             # Ground-Based Manual WT
-            if Slope<40 and TreeVolCT<80 and TreeVolSLT<80 and TreeVolLLT<500 and TreeVolALT<500 and TreeVol<500:
+            if Slope<40:
+                # Remove limits
+                # and TreeVolCT<80 and TreeVolSLT<80 and TreeVolLLT<500 and TreeVolALT<500 and TreeVol<500:
                 CostManFLBLLT2 = CostManFLBLLT2func()
                 CostManFellST2 = CostManFellST2func()
                 CostSkidUB = CostSkidUBfunc()
@@ -1550,10 +1552,16 @@ def harvestcost(PartialCut, Slope, SkidDist, Elevation,
                 GroundBasedManualWTAc = CostManFLBLLT2Ac + CostManFellST2Ac + CostSkidUBAc + CostProcessAc + CostChipWTAc + CostLoadAc*HaulProportion
                 GroundBasedManualWT = round (GroundBasedManualWTAc/VolPerAcre, 4)
             else:
-                GroundBasedManualWT = float('NaN') 
+                GroundBasedManualWT = float('inf') 
 
             # Cable Manual WT
-            if SkidDist<1300 and TreeVolCT<80 and TreeVolSLT<80 and TreeVolLLT<500 and TreeVolALT<500 and TreeVol<500:
+            if Slope>=40:
+                # Remove limits
+                # if not Helicopter:
+                #     SkidDistThreshold = float('inf')
+                # else:
+                #     SkidDistThreshold = 1300
+                # if SkidDist < SkidDistThreshold and TreeVolCT<80 and TreeVolSLT<80 and TreeVolLLT<500 and TreeVolALT<500 and TreeVol<500:
                 CostManFLBLLT2 = CostManFLBLLT2func()
                 CostManFellST2 = CostManFellST2func()
                 CostProcess = CostProcessfunc()
@@ -1573,65 +1581,37 @@ def harvestcost(PartialCut, Slope, SkidDist, Elevation,
                 CableManualWTAc = CostManFLBLLT2Ac + CostManFellST2Ac + CostProcessAc + CostChipWTAc + CostYardUBAc + CostLoadAc*HaulProportion
                 CableManualWT = round(CableManualWTAc/VolPerAcre, 4)
             else:
-                CableManualWT = float('NaN')
+                CableManualWT = float('inf')
 
-            # Cabel Manual WT (without SkidDist limit --> no helicopter)
-            if Helicopter is False:
-                if TreeVolCT<80 and TreeVolSLT<80 and TreeVolLLT<500 and TreeVolALT<500 and TreeVol<500:
-                    CostManFLBLLT2 = CostManFLBLLT2func()
-                    CostManFellST2 = CostManFellST2func()
-                    CostProcess = CostProcessfunc()
-                    CostChipWT = CostChipWTfunc()
-                    CostLoad = CostLoadfunc()
-                    if PartialCut == 1:
-                        CostYardPCUB = CostYardPCUBfunc()
-                        CostYardUBAc = round (CostYardPCUB*VolPerAcre/100)
-                    else:
-                        CostYardCCUB = CostYardCCUBfunc()
-                        CostYardUBAc = round (CostYardCCUB*VolPerAcre/100)
-                    CostManFLBLLT2Ac = round(CostManFLBLLT2*VolPerAcreLLT/100)
-                    CostManFellST2Ac = round(CostManFellST2*VolPerAcreST/100)
-                    CostProcessAc = round(CostProcess*VolPerAcreSLT/100)
-                    CostChipWTAc = round (CostChipWT*VolPerAcreCT/100)
-                    CostLoadAc = round(CostLoad*VolPerAcreALT/100)
-                    CableManualWTAc = CostManFLBLLT2Ac + CostManFellST2Ac + CostProcessAc + CostChipWTAc + CostYardUBAc + CostLoadAc*HaulProportion
-                    CableManualWT = round(CableManualWTAc/VolPerAcre, 4)
-                else:
-                    CableManualWT = float('NaN')
-            
             # Helicopter Manual WT
-            if Helicopter is True:
-                if TreeVolCT<80 and TreeVolALT<250 and SkidDist<10000 and TreeVol<250 and TreeVolLLT<150:
-                    CostHeliYardML, CostHeliLoadML = CostHelifunc()
-                    CostManFLB = CostManFLBfunc()
-                    CostChipWT = CostChipWTfunc()
-                    CostHeliYardMLAc = round(CostHeliYardML*VolPerAcre/100)
-                    CostHeliLoadMLAc = round(CostHeliLoadML*VolPerAcreALT/100)
-                    CostManFLBAc = round (CostManFLB*VolPerAcre/100)
-                    CostChipWTAc = round (CostChipWT*VolPerAcreCT/100)
-                    HelicopterManualWTAc = CostHeliLoadMLAc*HaulProportion + CostHeliYardMLAc + CostManFLBAc + CostChipWTAc
-                    HelicopterManualWT = round (HelicopterManualWTAc/VolPerAcre, 4)
-                else:
-                    HelicopterManualWT = float('NaN')
+            if Helicopter:
+                # Remove limits
+                # if TreeVolCT<80 and TreeVolALT<250 and SkidDist<10000 and TreeVol<250 and TreeVolLLT<150:
+                CostHeliYardML, CostHeliLoadML = CostHelifunc()
+                CostManFLB = CostManFLBfunc()
+                CostChipWT = CostChipWTfunc()
+                CostHeliYardMLAc = round(CostHeliYardML*VolPerAcre/100)
+                CostHeliLoadMLAc = round(CostHeliLoadML*VolPerAcreALT/100)
+                CostManFLBAc = round (CostManFLB*VolPerAcre/100)
+                CostChipWTAc = round (CostChipWT*VolPerAcreCT/100)
+                HelicopterManualWTAc = CostHeliLoadMLAc*HaulProportion + CostHeliYardMLAc + CostManFLBAc + CostChipWTAc
+                HelicopterManualWT = round (HelicopterManualWTAc/VolPerAcre, 4)
+                #else:
+                #    HelicopterManualWT = float('NaN')
             else:
-                HelicopterManualWT = float('NaN')
+                HelicopterManualWT = float('inf')
                 
    
-       
-            
             HarvestingSystemName = ['GroundBasedMechWT', 'GroundBasedManualWT', 'CableManualWT','HelicopterManualWT']
             HarvestingSystemPrice = [GroundBasedMechWT, GroundBasedManualWT, CableManualWT, HelicopterManualWT]
             HarvestingSystem = zip(HarvestingSystemName, HarvestingSystemPrice)
 
-            try:
-                Price = min(filter(lambda t:not math.isnan(t[1]), HarvestingSystem),key=operator.itemgetter(1))
-                HarvestingSystem, Price = Price
-            except:
-                Price =  float('NaN')
-                HarvestingSystem = 'NoSystem'
+            HarvestingSystem, Price = min(HarvestingSystem, key=operator.itemgetter(1))
+            if math.is_inf(Price):
+                raise Exception("No suitable harvest system was found")
 
         else:
-                Price =  0.0
-                HarvestingSystem = 'NoSystem'
-
-        return Price, HarvestingSystem # Price in ft3
+            Price = 0.0
+            HarvestingSystem = 'NoSystem'
+        
+        return Price, HarvestingSystem # Price / ft3
