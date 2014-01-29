@@ -8,18 +8,31 @@ import harvesting
 def cost_func(Area, Elevation, Slope, stand_wkt, RemovalsCT, TreeVolCT,
               RemovalsSLT, TreeVolSLT, RemovalsLLT, TreeVolLLT,
               HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT,
-              PartialCut, landing_coords, haulDist, haulTime, coord_mill, Helicopter = True, HaulProportion = 1.0):
+              PartialCut, landing_coords, haulDist, haulTime, coord_mill, Helicopter = True, HaulProportion = 1.0, skid_distance=None):
 
     #############################################
     # Skid Distance, Haul Distance Extension    #
     #############################################
-    SkidDist, HaulDistExtension, coord_landing_stand = skidding.skidding(stand_wkt, landing_coords, Slope)
-    HaulDistExtension = round(HaulDistExtension*0.000189394, 3)  # convert to miles 
+    if not skid_distance:
+        SkidDist, HaulDistExtension, coord_landing_stand = skidding.skidding(stand_wkt, landing_coords, Slope)
+        HaulDistExtension = round(HaulDistExtension*0.000189394, 3)  # convert to miles 
+    else:
+        # skid distance was provided, don't calculate
+        coord_landing_stand = (0,0)
+        HaulDistExtension = 0.0
+        SkidDist = skid_distance
 
     #############################################
     # Harvest Cost                              #
     #############################################
-    harvest_result = harvesting.harvestcost(PartialCut, Slope, SkidDist, Elevation, RemovalsCT, TreeVolCT, RemovalsSLT, TreeVolSLT, RemovalsLLT, TreeVolLLT, HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT, Helicopter, HaulProportion)
+    harvest_result = harvesting.harvestcost(
+         PartialCut, Slope, SkidDist, Elevation, 
+         RemovalsCT, TreeVolCT, 
+         RemovalsSLT, TreeVolSLT, 
+         RemovalsLLT, TreeVolLLT, 
+         HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT, 
+         Helicopter, HaulProportion)
+
     harvestCost, HarvestSystem = harvest_result  # returns harvest cost per CCF and Harvesting System
 
     totalVolumePerAcre = TreeVolSLT*RemovalsSLT+RemovalsLLT*TreeVolLLT+RemovalsCT*TreeVolCT
