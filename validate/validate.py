@@ -17,6 +17,9 @@ iters = 200
 
 print "name,actual,predicted\n"
 for row in costdata:
+    row['landing_coords_dummy'] = 'dummy'
+    row['coord_mill_dummy'] = 'dummy'
+    row['stand_wkt_dummy'] = 'dummy'
     for i in range(iters):
         args = []
         for field in fields:
