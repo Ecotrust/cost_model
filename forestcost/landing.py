@@ -45,7 +45,8 @@ def landing(lyr=None, centroid_coords=None):
 
     # get nearest point on road from centroid as json string
     headers = {'User-Agent': 'Forestry Scenario Planner'}
-    url = "http://router.project-osrm.org/nearest?loc=%f,%f" % (centroidLat, centroidLon)
+    #Updated to API V5
+    url = "http://router.project-osrm.org/nearest/v1/car/%f,%f" % (centroidLon,centroidLat)
     tmp = tempfile.gettempdir()
     key = os.path.join(tmp, "%s_%s-None.cache" % (centroidLat, centroidLon))
     if os.path.exists(key):
@@ -61,6 +62,6 @@ def landing(lyr=None, centroid_coords=None):
             cache.write(json.dumps(data))
 
     # parse json string for landing coordinate
-    landing_lat, landing_lon = data['mapped_coordinate']
+    landing_lon, landing_lat = data['waypoints'][0]['location']
 
     return (landing_lon, landing_lat)
