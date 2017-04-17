@@ -12,7 +12,7 @@ def routing(landing_coords, mill_coords=None, mill_shp=None, mill_filter=None):
         raise Exception("Either mill_coords or mill_shp is required")
 
     # create landing coordinate string
-    coord_landing = '%f,%f' % (landing_coords[1], landing_coords[0])
+    coord_landing = '%f,%f' % (landing_coords[0], landing_coords[1])
 
     if mill_shp:
         driver = ogr.GetDriverByName('ESRI Shapefile')
@@ -27,14 +27,14 @@ def routing(landing_coords, mill_coords=None, mill_shp=None, mill_filter=None):
         mill_geom = millfeat.GetGeometryRef()
         mill_Lon = mill_geom.GetX()
         mill_Lat = mill_geom.GetY()
-        coord_mill = '%f,%f' % (mill_Lat, mill_Lon)
+        coord_mill = '%f,%f' % (mill_Lon, mill_Lat)
         return coord_mill
 
     def routing_request(coord_landing, coord_mill):
         try:
             # get routing json string from landing to mill
             headers = {'User-Agent': 'Forestry Scenario Planner'}
-            url = 'http://router.project-osrm.org/viaroute?loc=' + coord_landing + '&loc=' + coord_mill
+            url = 'http://router.project-osrm.org/route/v1/car/' + coord_landing + ';' + coord_mill
             tmp = tempfile.gettempdir()
             key = os.path.join(tmp, "%s-%s.cache" % tuple([x.replace(",", "_") for x in [coord_landing, coord_mill]]))
             if os.path.exists(key):
@@ -50,19 +50,19 @@ def routing(landing_coords, mill_coords=None, mill_shp=None, mill_filter=None):
                     cache.write(json.dumps(data))
 
             # parse json string for distance
-            total_summary = data['route_summary']
-            total_distance = total_summary['total_distance']  # in meters
-            total_time = total_summary['total_time']  # in sec
+            total_summary = data['routes'][0]
+            total_distance = total_summary['distance']  # in meters
+            total_time = total_summary['duration']  # in sec
         except:
             print "ERROR: Routing request failed. Haul cost will be $0"
             total_distance = 0.00001 # can not be exactly zero because of distdict min
             total_time = 0.00001
-            
+
         return total_distance, total_time
 
     # determine mill and run routing
     if mill_coords:
-        coord_mill = '%f,%f' % (mill_coords[1], mill_coords[0])
+        coord_mill = '%f,%f' % (mill_coords[0], mill_coords[1])
         total_distance, total_time = routing_request(coord_landing, coord_mill)
         total_distance = total_distance*0.000621371  # convert to miles
         total_time = total_time/60.0  # convert to min
@@ -115,7 +115,7 @@ def routing(landing_coords, mill_coords=None, mill_shp=None, mill_filter=None):
         total_distance = distDict[coord_mill]*0.000621371  # convert to miles
         total_time = timeDict[coord_mill]/60.0  # convert to min
 
-    coord_mill_tuple = tuple([float(x) for x in reversed(coord_mill.split(","))])
+    coord_mill_tuple = tuple([float(x) for x in coord_mill.split(",")])
 
     if total_time > 0:
         total_time = round(total_time, 2)
