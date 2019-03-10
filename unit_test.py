@@ -7,7 +7,7 @@ from forestcost import main_model
 from forestcost import skidding
 from forestcost import harvesting
 from forestcost import hauling
-import ogr
+from osgeo import ogr
 
 driver = ogr.GetDriverByName('ESRI Shapefile')
 
@@ -29,13 +29,13 @@ def test_routing():
 
         # Input
         landing_coords = (-124.04858, 43.12776)
-        mill_shp = 'testdata//mills.shp'    
+        mill_shp = 'testdata//mills.shp'
 
         # Expected Output
-        haulDist = 8.674960531 
-        haulTime = 32.92 
+        haulDist = 8.674960531
+        haulTime = 32.92
         coord_mill = (-124.161246, 43.106512)
-        
+
         assert(routing.routing(landing_coords, mill_shp=mill_shp)) == (haulDist, haulTime, coord_mill)
 
 
@@ -44,39 +44,39 @@ def test_skidding():
 
         # Input
         stand_wkt = u'POLYGON ((-13809080.891332019 5330620.9753014417,-13808943.708174769 5331066.8205624959,-13808393.373740762 5330897.4868904939,-13808530.556898013 5330451.6416294342,-13809080.891332019 5330620.9753014417))'
-        landing_coords = (-124.04858, 43.12776) 
+        landing_coords = (-124.04858, 43.12776)
         Slope = 21.74728843
 
         # Expected Output
         SkidDist = 999.69
         HaulDistExtension = 1420.39
         coord_landing_stand = (-124.04706351844823, 43.125146208049415)
-		
+
         assert(skidding.skidding(stand_wkt, landing_coords, Slope)) == (SkidDist, HaulDistExtension, coord_landing_stand)
-		
-		
+
+
 def test_harvesting_GroundBasedMechWT():
         # test harvesting: harvestCost, HarvestSystem
-        
+
         # Input
-        PartialCut = 0 
+        PartialCut = 0
         Slope = 30
         SkidDist = 1200
         Elevation = 100
-        RemovalsCT = 200.0 
-        TreeVolCT = 5.0 
-        RemovalsSLT = 100.0 
-        TreeVolSLT = 70.0 
-        RemovalsLLT = 20.0 
-        TreeVolLLT = 200.0 
-        HdwdFractionCT = 0.15 
-        HdwdFractionSLT = 0.0 
+        RemovalsCT = 200.0
+        TreeVolCT = 5.0
+        RemovalsSLT = 100.0
+        TreeVolSLT = 70.0
+        RemovalsLLT = 20.0
+        TreeVolLLT = 200.0
+        HdwdFractionCT = 0.15
+        HdwdFractionSLT = 0.0
         HdwdFractionLLT = 0.0
-        
+
         # Expected Output
         harvestCost = 0.4423
         HarvestSystem = 'GroundBasedMechWT'
-        
+
         assert(harvesting.harvestcost(
                 PartialCut, Slope, SkidDist, Elevation,
                 RemovalsCT, TreeVolCT, RemovalsSLT, TreeVolSLT, RemovalsLLT, TreeVolLLT,
@@ -85,82 +85,82 @@ def test_harvesting_GroundBasedMechWT():
 
 def test_harvesting_GroundBasedMechWT():
         # test harvesting: harvestCost, HarvestSystem
-        
+
         # Input
-        PartialCut = 1 
+        PartialCut = 1
         Slope = 30
         SkidDist = 100
         Elevation = 100
-        RemovalsCT = 200.0 
-        TreeVolCT = 5.0 
-        RemovalsSLT = 100.0 
-        TreeVolSLT = 70.0 
-        RemovalsLLT = 20.0 
-        TreeVolLLT = 200.0 
-        HdwdFractionCT = 0.15 
-        HdwdFractionSLT = 0.0 
+        RemovalsCT = 200.0
+        TreeVolCT = 5.0
+        RemovalsSLT = 100.0
+        TreeVolSLT = 70.0
+        RemovalsLLT = 20.0
+        TreeVolLLT = 200.0
+        HdwdFractionCT = 0.15
+        HdwdFractionSLT = 0.0
         HdwdFractionLLT = 0.0
-        
+
         # Expected Output
         harvestCost = 0.3038
         HarvestSystem = 'GroundBasedMechWT'
-        
+
         assert(harvesting.harvestcost(
                 PartialCut, Slope, SkidDist, Elevation,
                 RemovalsCT, TreeVolCT, RemovalsSLT, TreeVolSLT, RemovalsLLT, TreeVolLLT,
                 HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT))== (harvestCost, HarvestSystem)
 
-				
+
 def test_harvesting_GroundBasedManualWT():
         # test harvesting: harvestCost, HarvestSystem
-        
+
         # Input
-        PartialCut = 0 
+        PartialCut = 0
         Slope = 30
         SkidDist = 1200
         Elevation = 100
-        RemovalsCT = 200.0 
-        TreeVolCT = 5.0 
-        RemovalsSLT = 100.0 
-        TreeVolSLT = 70.0 
-        RemovalsLLT = 20.0 
-        TreeVolLLT = 300.0 
-        HdwdFractionCT = 0.15 
-        HdwdFractionSLT = 0.0 
+        RemovalsCT = 200.0
+        TreeVolCT = 5.0
+        RemovalsSLT = 100.0
+        TreeVolSLT = 70.0
+        RemovalsLLT = 20.0
+        TreeVolLLT = 300.0
+        HdwdFractionCT = 0.15
+        HdwdFractionSLT = 0.0
         HdwdFractionLLT = 0.0
-        
+
         # Expected Output
         harvestCost = 0.5358
         HarvestSystem = 'GroundBasedManualWT'
-        
+
         assert(harvesting.harvestcost(
                 PartialCut, Slope, SkidDist, Elevation,
                 RemovalsCT, TreeVolCT, RemovalsSLT, TreeVolSLT, RemovalsLLT, TreeVolLLT,
                 HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT))== (harvestCost, HarvestSystem)
 
-				
+
 def test_harvesting_CableManualWT():
         # test harvesting: harvestCost, HarvestSystem
-        
+
         # Input
-        PartialCut = 0 
+        PartialCut = 0
         Slope = 60
         SkidDist = 1200
         Elevation = 100
-        RemovalsCT = 200.0 
-        TreeVolCT = 5.0 
-        RemovalsSLT = 100.0 
-        TreeVolSLT = 70.0 
-        RemovalsLLT = 20.0 
-        TreeVolLLT = 200.0 
-        HdwdFractionCT = 0.15 
-        HdwdFractionSLT = 0.0 
+        RemovalsCT = 200.0
+        TreeVolCT = 5.0
+        RemovalsSLT = 100.0
+        TreeVolSLT = 70.0
+        RemovalsLLT = 20.0
+        TreeVolLLT = 200.0
+        HdwdFractionCT = 0.15
+        HdwdFractionSLT = 0.0
         HdwdFractionLLT = 0.0
-        
+
         # Expected Output
         harvestCost = 0.7595
         HarvestSystem = 'CableManualWT'
-        
+
         assert(harvesting.harvestcost(
                 PartialCut, Slope, SkidDist, Elevation,
                 RemovalsCT, TreeVolCT, RemovalsSLT, TreeVolSLT, RemovalsLLT, TreeVolLLT,
@@ -169,65 +169,65 @@ def test_harvesting_CableManualWT():
 
 def test_harvesting_CableManualWT_PartialCut():
         # test harvesting: harvestCost, HarvestSystem
-        
+
         # Input
-        PartialCut = 1 
+        PartialCut = 1
         Slope = 60
         SkidDist = 1200
         Elevation = 100
-        RemovalsCT = 200.0 
-        TreeVolCT = 5.0 
-        RemovalsSLT = 100.0 
-        TreeVolSLT = 70.0 
-        RemovalsLLT = 20.0 
-        TreeVolLLT = 200.0 
-        HdwdFractionCT = 0.15 
-        HdwdFractionSLT = 0.0 
+        RemovalsCT = 200.0
+        TreeVolCT = 5.0
+        RemovalsSLT = 100.0
+        TreeVolSLT = 70.0
+        RemovalsLLT = 20.0
+        TreeVolLLT = 200.0
+        HdwdFractionCT = 0.15
+        HdwdFractionSLT = 0.0
         HdwdFractionLLT = 0.0
-        
+
         # Expected Output
         harvestCost = 0.5467
         HarvestSystem = 'CableManualWT'
-        
+
         assert(harvesting.harvestcost(
                 PartialCut, Slope, SkidDist, Elevation,
                 RemovalsCT, TreeVolCT, RemovalsSLT, TreeVolSLT, RemovalsLLT, TreeVolLLT,
                 HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT))== (harvestCost, HarvestSystem)
 
-				
+
 def test_harvesting_HelicopterManualWT():
         # test harvesting: harvestCost, HarvestSystem
-        
+
         # Input
-        PartialCut = 0 
+        PartialCut = 0
         Slope = 60
         SkidDist = 2000
         Elevation = 100
-        RemovalsCT = 200.0 
-        TreeVolCT = 5.0 
-        RemovalsSLT = 100.0 
-        TreeVolSLT = 70.0 
-        RemovalsLLT = 20.0 
-        TreeVolLLT = 100.0 
-        HdwdFractionCT = 0.15 
-        HdwdFractionSLT = 0.0 
+        RemovalsCT = 200.0
+        TreeVolCT = 5.0
+        RemovalsSLT = 100.0
+        TreeVolSLT = 70.0
+        RemovalsLLT = 20.0
+        TreeVolLLT = 100.0
+        HdwdFractionCT = 0.15
+        HdwdFractionSLT = 0.0
         HdwdFractionLLT = 0.0
-        
+
         # Expected Output
         harvestCost = 1.2036
         HarvestSystem = 'HelicopterManualWT'
-        
+
         assert(harvesting.harvestcost(
                 PartialCut, Slope, SkidDist, Elevation,
                 RemovalsCT, TreeVolCT, RemovalsSLT, TreeVolSLT, RemovalsLLT, TreeVolLLT,
                 HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT))== (harvestCost, HarvestSystem)
-	
+
 
 def test_hauling():
         # test hauling: haulCost
 
         # Input
-        haulDist = 8.94 
+        haulDist = 8.94
         haulTimeRT = 65.8402988889
 
         # Expected Output
@@ -243,23 +243,23 @@ def test_cost_func():
         # stand info
         area = 66.3709
         elevation = 141.034205761
-        slope = 21.74728843 
+        slope = 21.74728843
         stand_wkt = u'POLYGON ((-13809080.891332019 5330620.9753014417,-13808943.708174769 5331066.8205624959,-13808393.373740762 5330897.4868904939,-13808530.556898013 5330451.6416294342,-13809080.891332019 5330620.9753014417))'
         # harvest info
-        RemovalsCT = 200.0 
-        TreeVolCT = 5.0 
-        RemovalsSLT = 100.0 
-        TreeVolSLT = 70.0 
-        RemovalsLLT = 20.0 
-        TreeVolLLT = 200.0 
-        HdwdFractionCT = 0.15 
-        HdwdFractionSLT = 0.0 
+        RemovalsCT = 200.0
+        TreeVolCT = 5.0
+        RemovalsSLT = 100.0
+        TreeVolSLT = 70.0
+        RemovalsLLT = 20.0
+        TreeVolLLT = 200.0
+        HdwdFractionCT = 0.15
+        HdwdFractionSLT = 0.0
         HdwdFractionLLT = 0.0
-        PartialCut = 0 
+        PartialCut = 0
         # routing info
-        landing_coords = (-124.04858, 43.12776) 
+        landing_coords = (-124.04858, 43.12776)
         haulDist = 8.674960531
-        haulTime = 32.92 
+        haulTime = 32.92
         coord_mill = (-124.161246, 43.106512)
 
         # Expected Output

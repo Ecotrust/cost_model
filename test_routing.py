@@ -12,12 +12,12 @@ def test_routing_mill_shp():
         mill_shp=mill_shp
     )
 
-    print "Using shapefile to find nearest mill..."
-    print "Distance:", haulDist
-    print "Time:", haulTime
-    print "Landing coordinate:", landing_coords
-    print "Mill coordinate:", coord_mill
-    print
+    print("Using shapefile to find nearest mill...")
+    print("Distance:", haulDist)
+    print("Time:", haulTime)
+    print("Landing coordinate:", landing_coords)
+    print("Mill coordinate:", coord_mill)
+    print("")
 
 
 def test_routing_mill_filter():
@@ -33,12 +33,12 @@ def test_routing_mill_filter():
         mill_filter=mill_filter,
     )
 
-    print "Using shapefile filtered for `%s`..." % mill_filter
-    print "Distance:", haulDist
-    print "Time:", haulTime
-    print "Landing coordinate:", landing_coords
-    print "Mill coordinate:", coord_mill
-    print
+    print("Using shapefile filtered for `%s`..." % mill_filter)
+    print("Distance:", haulDist)
+    print("Time:", haulTime)
+    print("Landing coordinate:", landing_coords)
+    print("Mill coordinate:", coord_mill)
+    print("")
 
 
 def test_routing_mill_coords():
@@ -52,12 +52,12 @@ def test_routing_mill_coords():
         mill_coords=mill_coords,
     )
 
-    print "Using specified mill coordinates"
-    print "Distance:", haulDist
-    print "Time:", haulTime
-    print "Landing coordinate:", landing_coords
-    print "Mill coordinate:", coord_mill
-    print
+    print("Using specified mill coordinates")
+    print("Distance:", haulDist)
+    print("Time:", haulTime)
+    print("Landing coordinate:", landing_coords)
+    print("Mill coordinate:", coord_mill)
+    print("")
 
 
 if __name__ == "__main__":

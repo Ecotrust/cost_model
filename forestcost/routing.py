@@ -54,7 +54,7 @@ def routing(landing_coords, mill_coords=None, mill_shp=None, mill_filter=None):
             total_distance = total_summary['distance']  # in meters
             total_time = total_summary['duration']  # in sec
         except:
-            print "ERROR: Routing request failed. Haul cost will be $0"
+            print("ERROR: Routing request failed. Haul cost will be $0")
             total_distance = 0.00001 # can not be exactly zero because of distdict min
             total_time = 0.00001
 

@@ -3,7 +3,7 @@ from forestcost import routing as r
 from forestcost import landing
 from forestcost import gis
 from pprint import pprint
-import ogr
+from osgeo import ogr
 
 if __name__ == '__main__':
     ### GIS Data
@@ -81,7 +81,3 @@ if __name__ == '__main__':
     )
 
     pprint(cost)
-
-
-
-

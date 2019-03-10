@@ -1,7 +1,5 @@
 import math
-import skidding
-import hauling
-import harvesting
+from forestcost import skidding, hauling, harvesting
 
 
 # func for every stand per property
@@ -15,7 +13,7 @@ def cost_func(Area, Elevation, Slope, stand_wkt, RemovalsCT, TreeVolCT,
     #############################################
     if not skid_distance:
         SkidDist, HaulDistExtension, coord_landing_stand = skidding.skidding(stand_wkt, landing_coords, Slope)
-        HaulDistExtension = round(HaulDistExtension*0.000189394, 3)  # convert to miles 
+        HaulDistExtension = round(HaulDistExtension*0.000189394, 3)  # convert to miles
     else:
         # skid distance was provided, don't calculate
         coord_landing_stand = (0,0)
@@ -26,11 +24,11 @@ def cost_func(Area, Elevation, Slope, stand_wkt, RemovalsCT, TreeVolCT,
     # Harvest Cost                              #
     #############################################
     harvest_result = harvesting.harvestcost(
-         PartialCut, Slope, SkidDist, Elevation, 
-         RemovalsCT, TreeVolCT, 
-         RemovalsSLT, TreeVolSLT, 
-         RemovalsLLT, TreeVolLLT, 
-         HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT, 
+         PartialCut, Slope, SkidDist, Elevation,
+         RemovalsCT, TreeVolCT,
+         RemovalsSLT, TreeVolSLT,
+         RemovalsLLT, TreeVolLLT,
+         HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT,
          Helicopter, HaulProportion)
 
     harvestCost, HarvestSystem = harvest_result  # returns harvest cost per CCF and Harvesting System
@@ -59,9 +57,9 @@ def cost_func(Area, Elevation, Slope, stand_wkt, RemovalsCT, TreeVolCT,
 
         # stinger-steer log truck avg volume per load (7 CCF small timber to 10 CCF large timber)
         if totalVolumePerAcre > 0.0:
-            percentageCT = (TreeVolCT*RemovalsCT)/totalVolumePerAcre 
+            percentageCT = (TreeVolCT*RemovalsCT)/totalVolumePerAcre
             percentageSLT = (TreeVolSLT*RemovalsSLT)/totalVolumePerAcre
-            percentageLLT = (TreeVolLLT*RemovalsLLT)/totalVolumePerAcre 
+            percentageLLT = (TreeVolLLT*RemovalsLLT)/totalVolumePerAcre
             truckVol = percentageCT*700+percentageSLT*850+percentageLLT*1000
             trips = math.ceil(totalVolume/truckVol)  # necessary total trips to mill
             totalHaulCost = round(haulTimeRT*haulCost*trips*HaulProportion)  # total costs for all trips

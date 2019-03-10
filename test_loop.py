@@ -1,7 +1,7 @@
 from forestcost import main_model as m
 from forestcost import routing as r
 from pprint import pprint
-import ogr
+from osgeo import ogr
 
 
 def main():
@@ -26,8 +26,8 @@ def main():
     data = csv.reader(open('C:\\Users\\ustroetz\\Downloads\\fvsaggregate.csv', 'rb'))
     data.next()
     for row in data:
-        print row[1]
-    
+        print(row[1])
+
         ### Tree Data ###
         # Hardwood Fraction
         HdwdFractionCT = 0.15
@@ -46,12 +46,9 @@ def main():
         RemovalsLLT = float(row[43])
         TreeVolLLT = float(row[41])
 
-        print RemovalsCT, RemovalsSLT, RemovalsLLT
+        print(RemovalsCT, RemovalsSLT, RemovalsLLT)
 
-#        pprint (m.cost_func(slope_raster, elevation_raster, stand_lyr, mill_lyr, RemovalsCT, TreeVolCT, RemovalsSLT, TreeVolSLT, RemovalsLLT, TreeVolLLT, HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT, PartialCut, landing_geom, haulDist, haulTime, coord_mill))
-      
+#        pprint((m.cost_func(slope_raster, elevation_raster, stand_lyr, mill_lyr, RemovalsCT, TreeVolCT, RemovalsSLT, TreeVolSLT, RemovalsLLT, TreeVolLLT, HdwdFractionCT, HdwdFractionSLT, HdwdFractionLLT, PartialCut, landing_geom, haulDist, haulTime, coord_mill)))
+
 
 main()
-
-
-

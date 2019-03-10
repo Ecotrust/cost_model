@@ -1,5 +1,4 @@
-import ogr
-import osr
+from osgeo import ogr, osr
 ogr.UseExceptions()
 
 
@@ -36,7 +35,7 @@ def skidding(stand_wkt, landing_coords, Slope):
         # line from centroid to landing didn't intersect stand;
         # likely a poorly design stand geom where centroid doesn't fall on polygon
         # Default to using the entire line.
-        skidLineStand = ogr.CreateGeometryFromWkt(skidLine.ExportToWkt())  
+        skidLineStand = ogr.CreateGeometryFromWkt(skidLine.ExportToWkt())
 
     skidLineStand.FlattenTo2D()  # Ensure 2D lines, just in case
 
@@ -67,7 +66,7 @@ def skidding(stand_wkt, landing_coords, Slope):
                 point_geom = ogr.Geometry(ogr.wkbPoint)
                 point_geom.AddPoint_2D(lon, lat)
                 landing_stand_geom = point_geom
-                
+
             # get distance from centroid to landing at stand
             distance = centroid_geom.Distance(landing_stand_geom)
             dist_landing = (distance, landing_stand_geom)
@@ -81,8 +80,8 @@ def skidding(stand_wkt, landing_coords, Slope):
     if dist_landing_stand == 0.0:
         # Likely that both the landing and the centroid are outside the stand boundaries
         # Instead of centroid, use distance to stand polygon itself
-        # This could be a wildly inaccurate assumption but any stand which produces it 
-        # would be horribly designed as a homogeneous harvest anyways. 
+        # This could be a wildly inaccurate assumption but any stand which produces it
+        # would be horribly designed as a homogeneous harvest anyways.
         dist_landing_stand = geom.Distance(landing_stand_geom)
 
     YardDist = round((dist_landing_stand)*3.28084, 2)  # convert to feet
@@ -118,5 +117,5 @@ def skidding(stand_wkt, landing_coords, Slope):
     landing_lat, landing_lon = landing_stand_geom.GetX(), landing_stand_geom.GetY()
     coord_landing_stand = (landing_lat, landing_lon)
     coord_landing_stand_tuple = tuple(coord_landing_stand)
-    
+
     return YardDist, HaulDistExtension, coord_landing_stand_tuple

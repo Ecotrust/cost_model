@@ -8,14 +8,14 @@ fields = """acres elev slope stand_wkt_dummy RemovalsCT TreeVolCT
           RemovalsSLT TreeVolSLT RemovalsLLT TreeVolLLT
           HdwdFractionCT HdwdFractionSLT HdwdFractionLLT
           PartialCut landing_coords_dummy haulDist haulTime coord_mill_dummy""".split()
-          
-          # Helicopter = True 
+
+          # Helicopter = True
           # HaulProportion = 1.0
           # skid_distance=None
 
 iters = 200
 
-print "name,actual,predicted\n"
+print("name,actual,predicted\n")
 for row in costdata:
     row['landing_coords_dummy'] = 'dummy'
     row['coord_mill_dummy'] = 'dummy'
@@ -48,7 +48,7 @@ for row in costdata:
                 low, high = [float(x) for x in val.split("|")]
                 skid_distance = random.uniform(low, high)
 
-        #print args
+        #print(args)
         results = main_model.cost_func(*args, Helicopter=False, HaulProportion=haulprop, skid_distance=skid_distance)
-        print ",".join(str(x) for x in [row['name'], row['actual_cost'], results['total_cost']])
-        print "\n"
+        print(",".join(str(x) for x in [row['name'], row['actual_cost'], results['total_cost']]))
+        print("\n")

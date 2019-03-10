@@ -2,8 +2,7 @@
 
 import requests
 import json
-import ogr
-import osr
+from osgeo import ogr, osr
 import os
 import tempfile
 ogr.UseExceptions()

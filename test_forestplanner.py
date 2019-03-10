@@ -106,7 +106,7 @@ def main():
         area = row['acres']
         if year != int(row['year']):
             year = int(row['year'])
-            print "Calculating cost per stand in year", year
+            print("Calculating cost per stand in year", year)
             years.append(year)
             annual_total_cost[year] += 0
             annual_haul_cost[year] += 0
@@ -114,7 +114,7 @@ def main():
             annual_ground_harvest_cost[year] += 0
             annual_cable_harvest_cost[year] += 0
 
-        # NOTE: elevation and slope come directly from stand 
+        # NOTE: elevation and slope come directly from stand
         # if we use spatial contrainsts to chop scenariostands,
         # will need to recalc zonal stats
         elevation = row['elev']
@@ -201,34 +201,34 @@ def main():
             skip_error += 1
 
             # import traceback
-            # print cost_args
-            # print traceback.format_exc()
+            # print(cost_args)
+            # print(traceback.format_exc())
 
 
     def ordered_costs(x):
         sorted_x = sorted(x.iteritems(), key=operator.itemgetter(0))
         return [-1 * z[1] for z in sorted_x]
 
-    print "--------"
-    print "    var heli =", json.dumps(ordered_costs(annual_heli_harvest_cost)), ";"
-    print "    var cable =", json.dumps(ordered_costs(annual_cable_harvest_cost)), ";"
-    print "    var ground =", json.dumps(ordered_costs(annual_ground_harvest_cost)), ";"
-    print "    var haul =", json.dumps(ordered_costs(annual_haul_cost)), ";"
-    print "    var years =", json.dumps(sorted(annual_haul_cost.keys())), ";"
+    print("--------")
+    print("    var heli =", json.dumps(ordered_costs(annual_heli_harvest_cost)), ";")
+    print("    var cable =", json.dumps(ordered_costs(annual_cable_harvest_cost)), ";")
+    print("    var ground =", json.dumps(ordered_costs(annual_ground_harvest_cost)), ";")
+    print("    var haul =", json.dumps(ordered_costs(annual_haul_cost)), ";")
+    print("    var years =", json.dumps(sorted(annual_haul_cost.keys())), ";")
 
     # RANDOMLY determine a revenue w/in % of total cost; HACK
     rev = [-1 * x * (1.0 + (0.35 - (random.random() * 0.5))) for x in ordered_costs(annual_total_cost)]
     #rev = [-1 * x for x in ordered_costs(annual_total_cost)]
-    print "    var revenue =", json.dumps(rev), ";"
+    print("    var revenue =", json.dumps(rev), ";")
 
     # determine profit
     profit = [revenue + cost for revenue, cost in zip(rev, ordered_costs(annual_total_cost))]
-    print "    var profit =", json.dumps(profit), ";"
+    print("    var profit =", json.dumps(profit), ";")
 
-    print "--------"
-    print "year, heliHarvestCost, cableHarvestCost, groundHarvestCost, transportationCost"
+    print("--------")
+    print("year, heliHarvestCost, cableHarvestCost, groundHarvestCost, transportationCost")
     for year in sorted(dict(annual_haul_cost).keys()):
-        print ", ".join(str(x)
+        print(", ".join(str(x))
             for x in [
                 year,
                 annual_heli_harvest_cost[year],
@@ -238,10 +238,10 @@ def main():
             ]
         )
 
-    print "--------"
-    print "used records:", used_records
-    print "skipped (no harvest):", skip_noharvest
-    print "skipped (errors):", skip_error
+    print("--------")
+    print("used records:", used_records)
+    print("skipped (no harvest):", skip_noharvest)
+    print("skipped (errors):", skip_error)
 
 if __name__ == "__main__":
     main()
